@@ -133,6 +133,7 @@ RUN if [ "$USE_OLLAMA" = "true" ]; then \
 # install python dependencies
 COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
 
+RUN mkdir -p /app/backend/data
 RUN pip3 install uv && \
     if [ "$USE_CUDA" = "true" ]; then \
     # If you use CUDA the whisper and embedding model will be downloaded on first use
@@ -149,6 +150,8 @@ RUN pip3 install uv && \
     python -c "import os; import tiktoken; tiktoken.get_encoding(os.environ['TIKTOKEN_ENCODING_NAME'])"; \
     fi; \
     chown -R $UID:$GID /app/backend/data/
+
+RUN pip install pyodide-py
 
 
 
